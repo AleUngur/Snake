@@ -4,3 +4,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+h2 {
+  text-align: center;
+  font-size: 45px;
+  color: #ff6b6b;
+}
+
+body {
+  background-color: #424b54;
+}
