@@ -12,7 +12,6 @@ var dy = 0;
 var score = 0;
 var food_x;
 var food_y;
-
 document.addEventListener("keydown", changeDirection);
 
 startGame();
@@ -61,7 +60,7 @@ function moveSnake() {
   var head = { x: snake[0].x + dx, y: snake[0].y + dy };
   // Add the new head to the beginning of snake body
   snake.unshift(head);
-  if (snake[0].x === food_x && snake[0].y === food_y) {
+  if (snake[0].x == food_x && snake[0].y == food_y) {
     score += 10;
     document.getElementById("score").innerHTML = score;
     generateFood();
