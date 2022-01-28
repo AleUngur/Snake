@@ -1,38 +1,32 @@
-var gameboard_border = "#1a535c";
-var gameboard_background = "#edf6f9";
-var snake_body = "#4ecdc4";
-var snake_border = "#1a535c";
-
 //representing the snake as an array of coordinates
 var snake = [
-  //The y-coordinate for all parts is always 250
-  { x: 250, y: 250 }, //the snake head
-  { x: 230, y: 250 },
-  { x: 210, y: 250 },
+  { x: 200, y: 200 },
+  { x: 190, y: 200 },
+  { x: 180, y: 200 },
 ];
-
 var snakeboard = document.getElementById("snakeboard");
-// Return a two dimensional drawing context
 var snakeboard_ctx = snakeboard.getContext("2d");
-
-// True if changing direction
-var changing_direction = false;
-// to move horizontally
-var dx = 20;
-// to move vertically
+var changing_direction;
+var dx = 10;
 var dy = 0;
+var score = 0;
+var food_x;
+var food_y;
 
-document.addEventListener("keydown", changeDirection); //
+document.addEventListener("keydown", changeDirection);
 
 startGame();
+generateFood();
 
-// main function called repeatedly to keep the game running
+// startGame() function called repeatedly to keep the game running
 function startGame() {
   if (gameOver()) return;
   changing_direction = false;
   //add a slight delay between each call of the functions
-  setTimeout(function onTick() {
+  setTimeout(function repeat() {
+    changing_direction = false;
     clearBoard();
+    drawFood();
     moveSnake();
     //calling drawsnake() every time the snakes moves to see the intermediate moves of the snake
     drawSnake();
@@ -40,36 +34,27 @@ function startGame() {
   }, 100);
 }
 
-// draw a border around the canvas
+//draw a border around the canvas
 //remove all previous positions of the snake
 function clearBoard() {
-  //  Select the colour to fill the drawing
-  snakeboard_ctx.fillStyle = gameboard_background;
-  //  Select the colour for the border of the canvas
-  snakeboard_ctx.strokestyle = gameboard_border;
-  // Draw a "filled" rectangle to cover the entire canvas
+  snakeboard_ctx.fillStyle = "#edf6f9";
+  snakeboard_ctx.strokestyle = "#1a535c";
   snakeboard_ctx.fillRect(0, 0, snakeboard.width, snakeboard.height);
-  // Draw a "border" around the entire canvas
   snakeboard_ctx.strokeRect(0, 0, snakeboard.width, snakeboard.height);
 }
 
 // Draw the snake on the canvas
 function drawSnake() {
   // Draw each part
-  snake.forEach(drawSnakePart); //fac cu un for!!!
+  snake.forEach(drawSnakePart);
 }
 
 // Draw one snake part
 function drawSnakePart(snakePart) {
-  // Set the colour of the snake part
-  snakeboard_ctx.fillStyle = snake_body;
-  // Set the border colour of the snake part
-  snakeboard_ctx.strokestyle = snake_border;
-  // Draw a "filled" rectangle to represent the snake part at the coordinates
-  // the part is located
-  snakeboard_ctx.fillRect(snakePart.x, snakePart.y, 20, 20);
-  // Draw a border around the snake part
-  snakeboard_ctx.strokeRect(snakePart.x, snakePart.y, 20, 20);
+  snakeboard_ctx.fillStyle = "#4ecdc4";
+  snakeboard_ctx.strokestyle = "#1a535c";
+  snakeboard_ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
+  snakeboard_ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
 }
 
 function moveSnake() {
@@ -77,23 +62,13 @@ function moveSnake() {
   var head = { x: snake[0].x + dx, y: snake[0].y + dy };
   // Add the new head to the beginning of snake body
   snake.unshift(head);
-  snake.pop(); //delete last bodypart
-}
-
-function gameOver() {
-  for (var i = 2; i < snake.length; i++) {
-    //the head hit a body part
-    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
-      return true;
-    }
-  }
-  if (
-    /*hit left border*/ snake[0].x < 0 ||
-    /*hit right border*/ snake[0].x > snakeboard.width - 20 ||
-    /*hit top border*/ snake[0].y < 0 ||
-    /*hit down border*/ snake[0].y > snakeboard.height - 20
-  ) {
-    return true;
+  if (snake[0].x === food_x && snake[0].y === food_y) {
+    score += 10;
+    document.getElementById("score").innerHTML = score;
+    generateFood();
+  } else {
+    // Remove the last part of snake body
+    snake.pop();
   }
 }
 
@@ -107,30 +82,71 @@ function changeDirection(event) {
   changing_direction = true;
   var keyPressed = event.keyCode;
   // Prevent the snake from reversing
-  if (dy == -20) {
+  if (dy == -10) {
     var goingUp = true;
-  } else if (dy == 20) {
+  } else if (dy == 10) {
     var goingDown = true;
-  } else if ((dx = 20)) {
+  } else if ((dx = 10)) {
     var goingRight = true;
-  } else if (dx == -20) {
+  } else if (dx == -10) {
     var goingLeft = true;
   }
   //changing direction of the snake
   if (keyPressed === LEFT_KEY && !goingRight) {
-    dx = -20;
+    dx = -10;
     dy = 0;
   }
   if (keyPressed === UP_KEY && !goingDown) {
     dx = 0;
-    dy = -20;
+    dy = -10;
   }
   if (keyPressed === RIGHT_KEY && !goingLeft) {
-    dx = 20;
+    dx = 10;
     dy = 0;
   }
   if (keyPressed === DOWN_KEY && !goingUp) {
     dx = 0;
-    dy = 20;
+    dy = 10;
+  }
+}
+
+function generateFood() {
+  food_x = randomFood(0, snakeboard.width - 10);
+  food_y = randomFood(0, snakeboard.height - 10);
+  // if the new food location is where the snake currently is, generate a new food location
+  for (bodyPart in snake) {
+    function hasEatenFood(bodyPart) {
+      if (bodyPart.x == food_x.x && bodyPart.y == food_y.y) {
+        generateFood();
+      }
+    }
+  }
+}
+
+function drawFood() {
+  snakeboard_ctx.fillStyle = "#ff6b6b";
+  snakeboard_ctx.strokestyle = "#ffe66d";
+  snakeboard_ctx.fillRect(food_x, food_y, 10, 10);
+  snakeboard_ctx.strokeRect(food_x, food_y, 10, 10);
+}
+
+function randomFood(min, max) {
+  return Math.round((Math.random() * (max - min) + min) / 10) * 10;
+}
+
+function gameOver() {
+  for (var i = 2; i < snake.length; i++) {
+    //the head hit a body part
+    if (snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
+      return true;
+    }
+  }
+  if (
+    /*hit left border*/ snake[0].x < 0 ||
+    /*hit right border*/ snake[0].x > snakeboard.width - 10 ||
+    /*hit top border*/ snake[0].y < 0 ||
+    /*hit down border*/ snake[0].y > snakeboard.height - 10
+  ) {
+    return true;
   }
 }
