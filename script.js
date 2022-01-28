@@ -7,9 +7,9 @@ var snake = [
 var snakeboard = document.getElementById("snakeboard");
 var snakeboard_ctx = snakeboard.getContext("2d");
 var changing_direction;
+var score = 0;
 var dx = 10;
 var dy = 0;
-var score = 0;
 var food_x;
 var food_y;
 document.addEventListener("keydown", changeDirection);
@@ -43,7 +43,6 @@ function clearBoard() {
 
 // Draw the snake on the canvas
 function drawSnake() {
-  // Draw each part
   snake.forEach(drawSnakePart);
 }
 
