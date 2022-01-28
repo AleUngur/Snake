@@ -21,7 +21,6 @@ generateFood();
 // startGame() function called repeatedly to keep the game running
 function startGame() {
   if (gameOver()) return;
-  changing_direction = false;
   //add a slight delay between each call of the functions
   setTimeout(function repeat() {
     changing_direction = false;
@@ -80,31 +79,32 @@ function changeDirection(event) {
 
   if (changing_direction) return;
   changing_direction = true;
+
   var keyPressed = event.keyCode;
   // Prevent the snake from reversing
   if (dy == -10) {
     var goingUp = true;
   } else if (dy == 10) {
     var goingDown = true;
-  } else if ((dx = 10)) {
+  } else if (dx == 10) {
     var goingRight = true;
   } else if (dx == -10) {
     var goingLeft = true;
   }
   //changing direction of the snake
-  if (keyPressed === LEFT_KEY && !goingRight) {
+  if (keyPressed == LEFT_KEY && !goingRight) {
     dx = -10;
     dy = 0;
   }
-  if (keyPressed === UP_KEY && !goingDown) {
+  if (keyPressed == UP_KEY && !goingDown) {
     dx = 0;
     dy = -10;
   }
-  if (keyPressed === RIGHT_KEY && !goingLeft) {
+  if (keyPressed == RIGHT_KEY && !goingLeft) {
     dx = 10;
     dy = 0;
   }
-  if (keyPressed === DOWN_KEY && !goingUp) {
+  if (keyPressed == DOWN_KEY && !goingUp) {
     dx = 0;
     dy = 10;
   }
@@ -116,7 +116,7 @@ function generateFood() {
   // if the new food location is where the snake currently is, generate a new food location
   for (bodyPart in snake) {
     function hasEatenFood(bodyPart) {
-      if (bodyPart.x == food_x.x && bodyPart.y == food_y.y) {
+      if (bodyPart.x == food_x && bodyPart.y == food_y) {
         generateFood();
       }
     }
