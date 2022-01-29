@@ -119,10 +119,8 @@ function generateDots() {
   dot_y = randomDots(0, gameboard.height - 10);
   // if the new dot location is where the snake currently is, generate a new dot location
   for (bodyPart in snake) {
-    function hasEatenDot(bodyPart) {
-      if (bodyPart.x == dot_x && bodyPart.y == dot_y) {
-        generateDots();
-      }
+    if (bodyPart.x == dot_x && bodyPart.y == dot_y) {
+      generateDots();
     }
   }
 }
