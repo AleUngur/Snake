@@ -9,7 +9,14 @@
   <body>
     <div><h2>Snake Game</h2></div>
     <div id="score">0</div>
-    <div><canvas id="snakeboard" width="400" height="400"></canvas></div>
+    <div>
+      <h1>Click start button to play!</h1>
+      <canvas id="gameboard" width="400" height="400"></canvas>
+    </div>
+    <div class="buttons">
+      <button id="startBtn" onclick="startGame(); generateDots()">Start</button
+      ><button id="newBtn" onclick="newGame()">New game</button>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
