@@ -19,6 +19,7 @@ function startGame() {
   //add a slight delay between each call of the functions
   setTimeout(function repeat() {
     changing_direction = false;
+    //remove all previous positions of the snake
     clearBoard();
     drawDots();
     moveSnake();
@@ -28,7 +29,6 @@ function startGame() {
 }
 
 //draw a border around the canvas
-//remove all previous positions of the snake
 function clearBoard() {
   gameboard_ctx.fillStyle = "#eff1f3";
   gameboard_ctx.strokestyle = "#1a535c";
@@ -152,6 +152,7 @@ function gameOver() {
     return true;
   }
 }
+
 function newGame() {
   location.reload();
 }
